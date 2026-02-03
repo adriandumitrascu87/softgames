@@ -1,7 +1,10 @@
-import * as PIXI from "pixi.js";
-import { FpsCounter } from "./utils/FpsCounter";
 
-const app = new PIXI.Application();
+import { Application } from "pixi.js";
+import { FpsCounter } from "./objects/FpsCounter";
+import { UnitManager } from "./scenes/UnitManager";
+import { TitleScreen } from "./scenes/TitleScreen";
+
+const app = new Application();
 const fpsCounter =  new FpsCounter(5,5);
 
 await app.init({
@@ -12,20 +15,12 @@ await app.init({
 
 document.body.appendChild(app.canvas);
 
+const unitManager = new UnitManager(app.stage);
+unitManager.loadUnit(new TitleScreen())
+
 app.stage.addChild(fpsCounter);
-// Example sprite
-const box = new PIXI.Graphics()
-  .rect(0, 0, 100, 100)
-  .fill(0xff595e);
 
-box.x = 350;
-box.y = 250;
-
-app.stage.addChild(box);
-
-// Simple animation
 app.ticker.add((ticker) => {
-  box.rotation += 0.01;
    fpsCounter.update(ticker.deltaMS);
 });
 
