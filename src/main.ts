@@ -24,7 +24,7 @@ loadEvents.on("BACK", () => {
   // unitManager.loadUnit(new LevelSelect());
 });
 
-loadEvents.on("LOAD_UNIT", (unit) => {
+loadEvents.on("LOAD_UNIT", (data) => {
   // unitManager.loadUnit(new Unit(unit));
 });
 
