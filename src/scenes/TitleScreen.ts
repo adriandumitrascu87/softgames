@@ -1,15 +1,34 @@
 import { Container, Graphics } from "pixi.js";
 import type { IUnit } from "../utils/IUnit";
+import { PlayButton } from "../objects/PlayButton";
 
 export class TitleScreen extends Container implements IUnit {
+  constructor() {
+    super();
+    
+    this.initObjects();
+  }
+
+  initObjects (){
+    this.createStartButton();
+  }
+
+  createStartButton  = ()=>{
+
+  const playButton = new PlayButton();
+
+  playButton.position.set(300,400);
+
+   playButton.on("pointerdown", () => {
+      console.log("Play clicked");
+      //   manager
+    });
+
+    this.addChild(playButton);
+    
+  }
   onEnterUnit(): void {
-    // Example sprite
-    const box = new Graphics().rect(0, 0, 100, 100).fill(0x00ff00);
 
-    box.x = 350;
-    box.y = 250;
-
-    this.addChild(box);
   }
   onExitUnit(): void {}
 }
