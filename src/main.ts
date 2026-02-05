@@ -14,8 +14,12 @@ await app.init({
 
 document.body.appendChild(app.canvas);
 
+
+//load first unit - Title Screen
 const unitManager = new UnitManager(app.stage);
 unitManager.loadUnit(new TitleScreen());
+unitManager.onResize(app.screen.width, app.screen.height);
+
 loadEvents.on("START", () => {
   // unitManager.loadUnit(new LevelSelect());
 });
@@ -29,12 +33,13 @@ loadEvents.on("LOAD_UNIT", (data) => {
 });
 
 app.stage.addChild(fpsCounter);
-
 app.ticker.add((ticker) => {
   fpsCounter.update(ticker.deltaMS);
 });
 
 window.addEventListener("resize", () => {
   app.renderer.resize(window.innerWidth, window.innerHeight);
+
+  unitManager.onResize(app.screen.width, app.screen.height);
   fpsCounter.resize();
 });

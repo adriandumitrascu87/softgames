@@ -5,7 +5,6 @@ export class UnitManager {
   private currentUnit?: IUnit;
 
   loadUnit(nextUnit: IUnit) {
-
     this.removeCurrentUnit();
     this.loadNextUnit(nextUnit);
 
@@ -24,5 +23,10 @@ export class UnitManager {
     this.currentUnit = nextUnit;
     this.rootParent.addChild(nextUnit);
     nextUnit.onEnterUnit();
+    nextUnit.onResize(this.rootParent.app, this.rootParent.height);
+  }
+
+  onResize(w: number, h: number) {
+    if (this.currentUnit) this.currentUnit.onResize(w, h);
   }
 }
