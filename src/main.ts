@@ -1,11 +1,15 @@
-import { Application } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import { FpsCounter } from "./objects/FpsCounter";
 import { UnitManager } from "./scenes/UnitManager";
 import { TitleScreen } from "./scenes/TitleScreen";
 import { loadEvents } from "./utils/EventBus";
+import { LevelSelect } from "./scenes/LevelSelect";
 
 const app = new Application();
 const fpsCounter = new FpsCounter(5, 5);
+
+
+const debugLayer = new Container();
 
 await app.init({
   resizeTo: window,
@@ -21,7 +25,7 @@ unitManager.loadUnit(new TitleScreen());
 unitManager.onResize(app.screen.width, app.screen.height);
 
 loadEvents.on("START", () => {
-  // unitManager.loadUnit(new LevelSelect());
+  unitManager.loadUnit(new LevelSelect());
 });
 
 loadEvents.on("BACK", () => {
@@ -32,7 +36,9 @@ loadEvents.on("LOAD_UNIT", (data) => {
   // unitManager.loadUnit(new Unit(unit));
 });
 
-app.stage.addChild(fpsCounter);
+app.stage.addChild(debugLayer);
+debugLayer.addChild(fpsCounter);
+
 app.ticker.add((ticker) => {
   fpsCounter.update(ticker.deltaMS);
 });

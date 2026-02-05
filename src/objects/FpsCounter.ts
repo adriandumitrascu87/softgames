@@ -32,6 +32,8 @@ export class FpsCounter extends Container {
         this.fpsText.height / 2,
       );
     }
+
+    this.visible = false;
   }
 
   private createTextObject() {
@@ -54,6 +56,7 @@ export class FpsCounter extends Container {
       this.frames = 0;
 
       if (this.fpsText.width != this.lastTextWidth) {
+        this.visible = true;
         this.resize();
       }
       this.lastTextWidth = this.fpsText.width;
