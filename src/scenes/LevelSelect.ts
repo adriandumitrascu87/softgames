@@ -1,10 +1,9 @@
 import { Container } from "pixi.js";
-import { UIButton } from "../objects/UIButton";
-import { loadEvents } from "../utils/EventBus";
+import { LevelButton } from "../objects/LevelButton";
 
 export class LevelSelect extends Container {
   private lvlTag: string = "lvl";
-  private levelButtons: UIButton[] = [];
+  private levelButtons: LevelButton[] = [];
   private lvlButtonLabel: string[] = [
     "Ace of Shadows",
     "Magic Words",
@@ -24,29 +23,16 @@ export class LevelSelect extends Container {
   }
 
   addListeners = () => {
-    for (let i = 0; i < this.levelButtons.length; i++) {
-      const lvlButton = this.levelButtons[i];
-
-      lvlButton.on("pointerdown", () => {
-        this.handleLvlButtonClick(lvlButton);
-      });
-    }
 
     this.on("resize", this.onResize);
-  }
-
-  handleLvlButtonClick(button: UIButton) {
-    loadEvents.emit("LOAD_UNIT", button.label);
   }
 
   createButtons = () => {
     for (let i = 0; i < this.lvlButtonLabel.length; i++) {
       const labelText = this.lvlButtonLabel[i];
+      const levelToLoad = this.lvlTag + "_" + (i + 1) ;
 
-      const button = new UIButton(labelText);
-
-      button.label = this.lvlTag + "_" + (i + 1);
-
+      const button = new LevelButton(labelText, levelToLoad );
       this.levelButtons.push(button);
 
       this.addChild(button);

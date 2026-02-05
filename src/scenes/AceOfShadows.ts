@@ -5,6 +5,7 @@ export class AceOfShadows extends Container {
   constructor() {
     super();
 
+    console.log("AceOfShadows")
   }
 
 }

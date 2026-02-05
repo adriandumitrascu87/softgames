@@ -1,8 +1,13 @@
+import { loadEvents } from "../utils/EventBus";
 import { UIButton } from "./UIButton";
 
-export class PlayButton extends UIButton{
+export class PlayButton extends UIButton {
+  constructor() {
+    super("PLAY");
+    this.on("pointerdown", this.handlePlayButtonClick);
+  }
 
-    constructor(){
-        super("PLAY");
-    }
+  handlePlayButtonClick() {
+    loadEvents.emit("START");
+  }
 }
