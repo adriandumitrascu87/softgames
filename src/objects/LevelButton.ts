@@ -10,6 +10,6 @@ export class LevelButton extends UIButton {
   }
 
   handleLevelClick(levelToload:string) {
-     loadEvents.emit("LOAD_UNIT", levelToload);
+     loadEvents.emit("LOAD_LEVEL", levelToload);
   }
 }

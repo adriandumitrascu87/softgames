@@ -1,12 +1,12 @@
 import { Application, Container } from "pixi.js";
 import { FpsCounter } from "./utils/FpsCounter";
-import { UnitManager } from "./scenes/UnitManager";
 import { TitleScreen } from "./scenes/TitleScreen";
 import { loadEvents } from "./utils/EventBus";
 import { LevelSelect } from "./scenes/LevelSelect";
 import { AceOfShadows } from "./scenes/AceOfShadows";
 import { MagicWords } from "./scenes/MagicWords";
 import { PhoenixFlame } from "./scenes/PhoenixFlame";
+import { LevelManager } from "./scenes/LevelManager";
 
 const app = new Application();
 const fpsCounter = new FpsCounter(5, 5);
@@ -20,34 +20,34 @@ await app.init({
 
 document.body.appendChild(app.canvas);
 
-//load first unit - Title Screen
-const unitManager = new UnitManager(app.stage);
-unitManager.loadUnit(new TitleScreen());
-unitManager.onResize(app.screen.width, app.screen.height);
+//load first level - Title Screen
+const levelManager = new LevelManager(app.stage);
+levelManager.loadLevel(new TitleScreen());
+levelManager.onResize(app.screen.width, app.screen.height);
 
 loadEvents.on("START", () => {
-  unitManager.loadUnit(new LevelSelect());
-  unitManager.onResize(app.screen.width, app.screen.height);
+  levelManager.loadLevel(new LevelSelect());
+  levelManager.onResize(app.screen.width, app.screen.height);
 });
 
 loadEvents.on("BACK", () => {
-  unitManager.loadUnit(new LevelSelect());
-  unitManager.onResize(app.screen.width, app.screen.height);
+  levelManager.loadLevel(new LevelSelect());
+  levelManager.onResize(app.screen.width, app.screen.height);
 });
 
-loadEvents.on("LOAD_UNIT", (nextUnit) => {
-  switch (nextUnit) {
+loadEvents.on("LOAD_LEVEL", (nextLevel) => {
+  switch (nextLevel) {
     case "lvl_1":
-      unitManager.loadUnit(new AceOfShadows());
-      unitManager.onResize(app.screen.width, app.screen.height);
+      levelManager.loadLevel(new AceOfShadows());
+      levelManager.onResize(app.screen.width, app.screen.height);
       break;
     case "lvl_2":
-      unitManager.loadUnit(new MagicWords());
-      unitManager.onResize(app.screen.width, app.screen.height);
+      levelManager.loadLevel(new MagicWords());
+      levelManager.onResize(app.screen.width, app.screen.height);
       break;
     case "lvl_3":
-      unitManager.loadUnit(new PhoenixFlame());
-      unitManager.onResize(app.screen.width, app.screen.height);
+      levelManager.loadLevel(new PhoenixFlame());
+      levelManager.onResize(app.screen.width, app.screen.height);
       break;
   }
 });
@@ -61,6 +61,6 @@ app.ticker.add((ticker) => {
 
 window.addEventListener("resize", () => {
   app.renderer.resize(window.innerWidth, window.innerHeight);
-  unitManager.onResize(app.screen.width, app.screen.height);
+  levelManager.onResize(app.screen.width, app.screen.height);
   fpsCounter.resize();
 });
