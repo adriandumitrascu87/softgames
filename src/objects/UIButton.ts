@@ -54,6 +54,8 @@ export class UIButton extends Container {
       },
     });
 
+    this.checkLabelSize();
+
     this.buttonLabelText.anchor.set(0.5);
     this.buttonLabelText.position.set(
       this.buttonWidth / 2,
@@ -62,6 +64,23 @@ export class UIButton extends Container {
 
     this.addChild(this.buttonLabelText);
   }
+
+  checkLabelSize = () => {
+    const minFontSize: number = 20;
+
+    // console.log("BEFORE", this.buttonLabelText.style.fontSize);
+    if (this.buttonLabelText.width <= this.bg.width * 0.9) return;
+
+    while (
+      this.buttonLabelText.width > this.bg.width * 0.9 &&
+      this.buttonLabelText.style.fontSize > minFontSize
+    ) {
+      this.buttonLabelText.style.fontSize =
+        this.buttonLabelText.style.fontSize - 1;
+    }
+
+    // console.log("AFTER", this.buttonLabelText.style.fontSize);
+  };
 
   private setupMouseEvents() {
     this.eventMode = "static";
