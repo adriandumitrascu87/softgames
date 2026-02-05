@@ -1,12 +1,14 @@
 import { Container } from "pixi.js";
-import type { IUnit } from "../utils/IUnit";
 import { PlayButton } from "../objects/PlayButton";
 
-export class TitleScreen extends Container implements IUnit {
+export class TitleScreen extends Container {
   private playButton?: PlayButton;
 
   constructor() {
     super();
+
+    this.initObjects();
+    this.addListeners();
   }
 
   initObjects() {
@@ -17,22 +19,10 @@ export class TitleScreen extends Container implements IUnit {
     this.playButton = new PlayButton();
     this.addChild(this.playButton);
   };
-  onEnterUnit(): void {
-    this.initObjects();
-    this.addListeners();
-  }
 
   addListeners() {
-    if (this.playButton)
-      this.playButton.on("pointerdown", this.handlePlayButtonClick);
+    this.on("resize", this.onResize);
   }
-
-  handlePlayButtonClick() {
-
-    console.log("PLAY")
-  }
-
-  onExitUnit(): void {}
 
   onResize(width: number, height: number): void {
     if (this.playButton) {
