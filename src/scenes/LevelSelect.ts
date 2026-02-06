@@ -1,5 +1,5 @@
 import { Container } from "pixi.js";
-import { LevelButton } from "../objects/LevelButton";
+import { LevelButton } from "../ui/LevelButton";
 
 export class LevelSelect extends Container {
   private lvlTag: string = "lvl";

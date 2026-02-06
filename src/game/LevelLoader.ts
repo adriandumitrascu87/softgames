@@ -1,9 +1,9 @@
 import { loadEvents } from "../utils/EventBus";
-import { AceOfShadows } from "./AceOfShadows";
+import { AceOfShadows } from "../scenes/AceOfShadows";
 import type { LevelManager } from "./LevelManager";
-import { LevelSelect } from "./LevelSelect";
-import { MagicWords } from "./MagicWords";
-import { PhoenixFlame } from "./PhoenixFlame";
+import { LevelSelect } from "../scenes/LevelSelect";
+import { MagicWords } from "../scenes/MagicWords";
+import { PhoenixFlame } from "../scenes/PhoenixFlame";
 
 export class LevelLoader {
   constructor(private levelManager: LevelManager) {}

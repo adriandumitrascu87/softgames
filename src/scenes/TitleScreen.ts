@@ -1,5 +1,5 @@
 import { Container } from "pixi.js";
-import { PlayButton } from "../objects/PlayButton";
+import { PlayButton } from "../ui/PlayButton";
 
 export class TitleScreen extends Container {
   private playButton?: PlayButton;
