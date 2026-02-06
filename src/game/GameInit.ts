@@ -19,7 +19,7 @@ export class GameInit {
     this.app.stage.addChild(this.gameLayer);
     this.app.stage.addChild(this.uiLayer);
 
-    this.levelManager = new LevelManager(this.app.stage);
+    this.levelManager = new LevelManager(this.gameLayer);
     this.fpsCounter = new FpsCounter();
 
     this.uiLayer.addChild(this.fpsCounter);
