@@ -1,4 +1,4 @@
-import { Assets, Container } from "pixi.js";
+import { Application, Assets, Container } from "pixi.js";
 import { BackButton } from "../ui/BackButton";
 import { gsap } from "gsap";
 import { Card } from "../objects/Card";
@@ -23,7 +23,7 @@ export class AceOfShadowsOLD extends Container {
   private limit: number = 20;
   // cardBackTexture: Texture = Assets.load("images/cardBack.jpg");
 
-  constructor() {
+  constructor(app:Application) {
     super();
 
     console.log("AceOfShadows");

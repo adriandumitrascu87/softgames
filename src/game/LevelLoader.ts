@@ -1,12 +1,15 @@
 import { loadEvents } from "../utils/EventBus";
-import { AceOfShadows } from "../scenes/AceOfShadows";
+
 import type { LevelManager } from "./LevelManager";
 import { LevelSelect } from "../scenes/LevelSelect";
 import { MagicWords } from "../scenes/MagicWords";
 import { PhoenixFlame } from "../scenes/PhoenixFlame";
+import { AceOfShadows } from "../scenes/AceOfShadows";
+import { CardAssets } from "../objects/CardAssets";
+import type { Application } from "pixi.js";
 
 export class LevelLoader {
-  constructor(private levelManager: LevelManager) {}
+  constructor(private levelManager: LevelManager, private app:Application) {}
 
   init() {
     this.registerLoadLevelEvents();
@@ -34,7 +37,11 @@ export class LevelLoader {
   private loadGameLevel(levelId: string) {
     switch (levelId) {
       case "lvl_1":
-        this.load(new AceOfShadows());
+        CardAssets.load().then(() => {
+          console.log("loading cards");
+          this.levelManager.loadLevel(new AceOfShadows(this.app));
+        });
+
         break;
       case "lvl_2":
         this.load(new MagicWords());
