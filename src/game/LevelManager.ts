@@ -1,6 +1,5 @@
 import type { Container } from "pixi.js";
 
-
 export class LevelManager {
   private currentLevel?: Container;
 
@@ -9,15 +8,16 @@ export class LevelManager {
     this.loadNextLevel(nextLevel);
   }
 
-  constructor(private rootParent: Container) {
-  
-  }
+  constructor(private rootParent: Container) {}
 
   private removeCurrentLevel() {
     if (!this.currentLevel) return;
 
+    if ("destroyUnit" in this.currentLevel) {
+      (this.currentLevel as any).destroyUnit();
+    }
     this.rootParent.removeChild(this.currentLevel);
-    this.currentLevel.destroy({ children: true });
+    this.currentLevel = undefined;
   }
 
   private loadNextLevel(nextLevel: Container) {
@@ -26,6 +26,6 @@ export class LevelManager {
   }
 
   onResize(w: number, h: number) {
-    if (this.currentLevel) this.currentLevel.emit("resize",w, h);
+    if (this.currentLevel) this.currentLevel.emit("resize", w, h);
   }
 }

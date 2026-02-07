@@ -3,8 +3,6 @@ import { Assets, type Texture } from "pixi.js";
 export class CardAssets {
   static textures: Texture[] = [];
 
-
-
   static async load() {
     const texturePaths = [
       "images/ace_1.png",
