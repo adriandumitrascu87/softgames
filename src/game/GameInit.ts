@@ -1,9 +1,11 @@
-import { Container, type Application } from "pixi.js";
+import { Assets, Container, type Application } from "pixi.js";
 import { LevelManager } from "./LevelManager";
 import { FpsCounter } from "../utils/FpsCounter";
 import { LevelLoader } from "./LevelLoader";
 import { TitleScreen } from "../scenes/TitleScreen";
 import { AceOfShadows } from "../scenes/AceOfShadows";
+import { CardAssets } from "../objects/CardAssets";
+import { isMobile } from "pixi.js";
 
 export class GameInit {
   private app: Application;
@@ -16,6 +18,11 @@ export class GameInit {
 
   constructor(app: Application) {
     this.app = app;
+
+    if (isMobile.any) {
+      this.app.ticker.maxFPS = 60;
+      this.app.ticker.minFPS = 60;
+    }
 
     this.app.stage.addChild(this.gameLayer);
     this.app.stage.addChild(this.uiLayer);
@@ -41,12 +48,15 @@ export class GameInit {
     resizeHandler();
   };
 
-  initLevels = () => {
+  initLevels = async () => {
     const loader = new LevelLoader(this.levelManager);
     loader.init();
 
+    console.log("loading cards");
+    await CardAssets.load();
+    this.levelManager.loadLevel(new AceOfShadows(this.app));
+
     // this.levelManager.loadLevel(new TitleScreen());
-    this.levelManager.loadLevel(new AceOfShadows());
   };
 
   iniLoop = () => {
