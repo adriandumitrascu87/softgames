@@ -1,4 +1,5 @@
 import { Container, Graphics, Text } from "pixi.js";
+import { Palette } from "../utils/Palette";
 
 export class UIButton extends Container {
   private bg!: Graphics;
@@ -24,7 +25,7 @@ export class UIButton extends Container {
     this.buttonWidth = buttonWidth ?? 160;
     this.buttonHeight = buttonHeight ?? 80;
     this.buttonRadius = buttonRadius ?? 10;
-    this.bgColor = bgColor ?? 0x000000;
+    this.bgColor = bgColor ?? Palette.primary;
 
     this.createBackground();
     this.createLabel();
@@ -50,7 +51,7 @@ export class UIButton extends Container {
       style: {
         fontFamily: "Arial",
         fontSize: Math.floor(this.buttonHeight / 2),
-        fill: 0xffffff,
+        fill: Palette.secondary,
       },
     });
 
@@ -81,6 +82,15 @@ export class UIButton extends Container {
 
     // console.log("AFTER", this.buttonLabelText.style.fontSize);
   };
+
+  disableInput() {
+    console.log(this.buttonLabel + " disabled")
+    this.eventMode = "none";
+  }
+  enableInput() {
+     console.log(this.buttonLabel + " enabled")
+    this.eventMode = "static";
+  }
 
   private setupMouseEvents() {
     this.eventMode = "static";
