@@ -1,18 +1,20 @@
-import {
-  Application,
-  Container,
-  ObservablePoint,
-  type DestroyOptions,
-} from "pixi.js";
+import { Application, Container, warn } from "pixi.js";
 import { CardPool } from "../objects/CardPool";
 import { Card } from "../objects/Card";
-
-import { gsap } from "gsap";
 import { BackButton } from "../ui/BackButton";
 import { UIButton } from "../ui/UIButton";
 import { Palette } from "../utils/Palette";
+import { Utils } from "../utils/Utils";
 
 export class AceOfShadows extends Container {
+
+  private readonly CARD_AMOUNT = 144;
+  private readonly CARD_SPAWN_INTERVAL_MS = 1000;
+  private readonly CARD_ANIMATION_DURATION_S = 2;
+
+  private readonly RANDOM_STACK_RADIUS = 75;
+
+
   private miniGameLayer = new Container();
   private uiLayer = new Container();
 
@@ -22,10 +24,6 @@ export class AceOfShadows extends Container {
   private allCards: Card[] = [];
   private destinationCards: Card[] = [];
 
-  private cardAmount = 144;
-  private animationDuration: number = 2; //seconds
-  private intervalDuration: number = 1000; //miliseconds
-
   private cardPool: CardPool;
 
   private backButton?: BackButton;
@@ -33,12 +31,13 @@ export class AceOfShadows extends Container {
   private animationInterval?: number;
   private resetButton?: UIButton;
   private app: Application;
+  
 
   constructor(app: Application) {
     super();
 
     this.app = app;
-    this.cardPool = new CardPool(this.cardAmount);
+    this.cardPool = new CardPool(this.CARD_AMOUNT);
 
     this.addChild(this.miniGameLayer);
     this.addChild(this.uiLayer);
@@ -57,8 +56,8 @@ export class AceOfShadows extends Container {
 
   //Add the card stack containers
   addCardContainers() {
-    this.miniGameLayer.addChild(this.destinationStackContainer);
     this.miniGameLayer.addChild(this.intialStackContainer);
+    this.miniGameLayer.addChild(this.destinationStackContainer);
   }
 
   // Create UI buttons and add them to the UI layer
@@ -76,40 +75,22 @@ export class AceOfShadows extends Container {
 
   // Create cards and place them in a randomized pile
   createCards = () => {
-   
-
-    let direction = 1;
-    for (let i = 0; i < this.cardAmount; i++) {
+    for (let i = 0; i < this.CARD_AMOUNT; i++) {
       const card = this.cardPool.getCardFromPool();
       this.allCards.push(card);
-      this.intialStackContainer.addChild(card);
 
-      const offset = this.randomPointInCircle();
+      const offset = Utils.getSpiralPosition(i);
       card.x = offset.x;
       card.y = offset.y;
-
-      direction = direction * -1;
-      card.angle = Math.random() * 360 * direction;
+      this.intialStackContainer.addChild(card);
     }
   };
-
-  // Generate a random point inside a circle
-  private randomPointInCircle() {
-
-    const radius:number =75;
-    const t = Math.random() * Math.PI * 2;
-    const r = Math.sqrt(Math.random()) * radius;
-
-    return {
-      x: Math.cos(t) * r,
-      y: Math.sin(t) * r,
-    };
-  }
 
   // Animate the next card from the initial stack to the destination stack
   animateNextCard() {
     this.animationInterval = setInterval(() => {
       if (this.allCards.length === 0) {
+        this.handleAnimationComplete();
         clearInterval(this.animationInterval);
       }
 
@@ -119,72 +100,31 @@ export class AceOfShadows extends Container {
       const globalPosition = curentCard.getGlobalPosition();
 
       this.intialStackContainer.removeChild(curentCard);
-      this.miniGameLayer.addChild(curentCard);
 
-      const localPosition = this.miniGameLayer.toLocal(globalPosition);
+      const localPosition =
+        this.destinationStackContainer.toLocal(globalPosition);
+
+      this.destinationStackContainer.addChild(curentCard);
+
       curentCard.position.copyFrom(localPosition);
 
-      this.tweenCardTo(curentCard, this.destinationStackContainer.position);
-    }, this.intervalDuration);
+      Utils.tweenContainerTo(curentCard, 0, 0, this.CARD_ANIMATION_DURATION_S);
+      this.destinationCards.push(curentCard);
+    }, this.CARD_SPAWN_INTERVAL_MS);
   }
 
-  // tween a card to the a destination position
-  tweenCardTo = (card: Card, endPosition: ObservablePoint) => {
-    gsap.to(card, {
-      x: endPosition.x,
-      y: endPosition.y,
-      duration: this.animationDuration, // animation lasts 2 seconds
-      angle: 0,
-      onComplete: () => {
-        this.handleCompleteAnimtion(card);
-        this.checkIfAllCardsAreMoved();
-      },
-    });
-  };
 
-  // Check if all cards have been moved to the destination stack
-  checkIfAllCardsAreMoved = () => {
-    if (this.destinationCards.length === this.cardAmount) {
+  handleAnimationComplete() {
+    if (this.destinationCards.length === this.CARD_AMOUNT) {
       console.log("Animation Done", this.destinationCards.length);
-      if (this.resetButton) this.toggleButtonVisibility(this.resetButton, true);
+      if (this.resetButton)
+        Utils.toggleButtonVisibility(
+          this.resetButton,
+          true,
+          this.CARD_SPAWN_INTERVAL_MS / 1000,
+        );
     }
-  };
-
-  // Toggle a button' s visibility and input state with animation
-  toggleButtonVisibility(button: UIButton, enable: boolean) {
-    if (enable) {
-      button.scale.set(0, 0);
-      button.visible = true;
-    } else {
-      button.disableInput();
-    }
-
-    const newScale = enable ? 1 : 0;
-    const ease = enable ? "power1.out" : "power1.in";
-
-    gsap.to(button.scale, {
-      x: newScale,
-      y: newScale,
-      duration: 0.1,
-      ease: ease,
-      onComplete: () => {
-        button.visible = enable;
-        if (enable) button.enableInput();
-      },
-    });
   }
-
-  // Handle logic after a card finishes moving
-  handleCompleteAnimtion = (card: Card) => {
-    this.miniGameLayer.removeChild(card);
-    this.destinationStackContainer.addChild(card);
-    card.position.set(0, 0);
-    this.destinationCards.push(card);
-
-    card.visible =
-      this.destinationStackContainer.children.indexOf(card) !=
-      this.destinationStackContainer.children.length - 2;
-  };
 
   // Start the timed card animation loop
   startLoopAnim() {
@@ -194,14 +134,14 @@ export class AceOfShadows extends Container {
   // Handle Play button click
   handleOnPlayClick = () => {
     if (!this.playButton) return;
-    this.toggleButtonVisibility(this.playButton, false);
+    Utils.toggleButtonVisibility(this.playButton, false);
     this.startLoopAnim();
   };
 
   // Handle Reset button click
   handleOnResetClick = () => {
     if (!this.resetButton) return;
-    this.toggleButtonVisibility(this.resetButton, false);
+    Utils.toggleButtonVisibility(this.resetButton, false);
     this.resetCards();
   };
   // Reset cards back to the initial stack
@@ -211,21 +151,34 @@ export class AceOfShadows extends Container {
     this.allCards = this.destinationCards.slice();
     this.destinationCards = [];
 
-    
-    console.log(this.allCards.length);
+    const randomCardPositions = Math.random() > 0.5;
+
+    if (randomCardPositions) warn("RANDOM IS NOT A BUG - IS A FEATURE");
+
+    let direction = 1;
+
     for (let i = 0; i < this.allCards.length; i++) {
       const card = this.allCards[i];
 
       this.intialStackContainer.addChild(card);
 
       card.visible = true;
-      const offset = this.randomPointInCircle();
+      card.angle = 0;
+
+      const offset = randomCardPositions
+        ? Utils.randomPointInCircle(75)
+        : Utils.getSpiralPosition(i);
+
       card.x = offset.x;
       card.y = offset.y;
-      card.angle = Math.random() * 360;
+
+      if (randomCardPositions) {
+        direction = direction * -1;
+        card.angle = Math.random() * 360 * direction;
+      }
     }
 
-    if (this.playButton) this.toggleButtonVisibility(this.playButton, true);
+    if (this.playButton) Utils.toggleButtonVisibility(this.playButton, true);
   };
 
   // add input and resize listeners
@@ -266,35 +219,22 @@ export class AceOfShadows extends Container {
     this.handleStackContainerPosition(width, height);
   }
 
-  destroy(options?: DestroyOptions): void {
+  destroyUnit() {
     if (this.animationInterval) {
       clearInterval(this.animationInterval);
       this.animationInterval = undefined;
     }
 
-    gsap.killTweensOf(this.allCards);
-    gsap.killTweensOf(this.destinationCards);
-
-    if (this.playButton) gsap.killTweensOf(this.playButton);
-    if (this.resetButton) gsap.killTweensOf(this.resetButton);
+    Utils.recursiveKillTweens(this);
 
     this.playButton?.off("pointerdown", this.handleOnPlayClick);
     this.resetButton?.off("pointerdown", this.handleOnResetClick);
-
     this.off("resize", this.onResize);
 
-    this.playButton?.disableInput();
-    this.resetButton?.disableInput();
-
-    this.intialStackContainer.removeChildren();
-    this.destinationStackContainer.removeChildren();
-    this.uiLayer.removeChildren();
-    this.miniGameLayer.removeChildren();
+    this.destroy({ children: true });
 
     this.allCards.length = 0;
     this.destinationCards.length = 0;
-
-    super.destroy(options);
 
     console.log("DESTROY Ace Of Shadows");
   }
