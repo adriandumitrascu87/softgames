@@ -1,7 +1,8 @@
 export const Palette = {
 
-  primary: 0xc56e3c,
-  secondary: 0x7ca3b4,
+  primary: 0x023047,
+  secondary: 0xffb703,
 
   textPrimary: 0xf5c96c,
+  textSeconday: 0xd62828,
 };

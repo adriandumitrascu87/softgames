@@ -1,4 +1,5 @@
 import { Container, Text, TextStyle } from "pixi.js";
+import { Palette } from "./Palette";
 
 export class FpsCounter extends Container {
   private FPS_TAG: string = "FPS";
@@ -11,7 +12,7 @@ export class FpsCounter extends Container {
   private readonly fpsStyle = new TextStyle({
     fontFamily: "Arial",
     fontSize: 20,
-    fill: 0xff0000,
+    fill: Palette.textSeconday,
   });
   repositionNeeded: boolean = false;
   lastTextWidth: number = 0;
