@@ -6,9 +6,14 @@ const app = new Application();
 
 
 await app.init({
-  resizeTo: window,
-  backgroundColor: 0x1e1e1e,
+  preference: 'webgl', // Use WebGL for better performance
+  antialias: true,
+  resolution: window.devicePixelRatio || 1,
+  autoDensity: true,
+  backgroundColor: 0x8ecae6,
 });
+
+app.init()
 
 
 document.body.appendChild(app.canvas);
