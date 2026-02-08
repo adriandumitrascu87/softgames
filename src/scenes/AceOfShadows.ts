@@ -166,7 +166,7 @@ export class AceOfShadows extends Container {
       card.angle = 0;
 
       const offset = randomCardPositions
-        ? Utils.randomPointInCircle(75)
+        ? Utils.randomPointInCircle(this.RANDOM_STACK_RADIUS)
         : Utils.getSpiralPosition(i);
 
       card.x = offset.x;

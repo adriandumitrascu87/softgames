@@ -21,7 +21,7 @@ export class Utils {
   static getSpiralPosition(
     index: number,
     angleStep: number = 0.1,
-    radiusStep: number = 0.4,
+    radiusStep: number = 0.5,
   ) {
     const angle = index * angleStep;
     const radius = index * radiusStep;
@@ -43,13 +43,23 @@ export class Utils {
     };
   }
 
-    // tween a object to the a destination position
-  static tweenContainerTo(cont: Container, destX: number, destY: number, duration:number) {
+  static isLandscape(w: number, h: number) {
+    return w > h;
+  }
+
+  // tween a object to the a destination position
+  static tweenContainerTo(
+    cont: Container,
+    destX: number,
+    destY: number,
+    duration: number,
+  ) {
+    const angle = cont.angle == 0 ? 360 : 0;
     gsap.to(cont, {
       x: destX,
       y: destY,
       duration: duration, // animation lasts 2 seconds
-      angle: 360,
+      angle: angle,
       ease: "power2.inOut",
     });
   }
