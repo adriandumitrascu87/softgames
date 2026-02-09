@@ -6,6 +6,7 @@ import { FireParticle } from "../objects/FireParticle";
 import { Utils } from "../utils/Utils";
 import { TextHolder } from "../objects/TextHolder";
 import { Palette } from "../utils/Palette";
+import { UIButton } from "../ui/UIButton";
 /** Phoenix flame particle effect */
 export class PhoenixFlame extends Container {
   private readonly PARTICLES_NUMBER: number = 10;
@@ -34,8 +35,7 @@ export class PhoenixFlame extends Container {
   /** Flame color palette */
   particleColors = [0xff0000, 0xff8d00, 0xffce00, 0xffe700];
 
-  
-   /** Particle pool */
+  /** Particle pool */
   private particlesArray: FireParticle[] = [];
   private particleTextures: Texture[] = [];
   private maxNrOfTextures: number = 10;
@@ -43,8 +43,11 @@ export class PhoenixFlame extends Container {
   backButton?: BackButton;
   textHolder?: TextHolder;
 
-   /** Cached ticker callback */
+  textHolderText = "great fire";
+
+  /** Cached ticker callback */
   tickFn?: () => void;
+  addParticlesButton?: UIButton;
 
   constructor(app: Application) {
     super();
@@ -54,13 +57,11 @@ export class PhoenixFlame extends Container {
     this.on("added", this.init);
   }
 
-
   /** level setup */
   init() {
     this.addChild(this.backgroundLayer);
     this.addChild(this.miniGameLayer);
     this.addChild(this.uiLayer);
-
 
     this.addBackground();
     this.addUI();
@@ -73,11 +74,10 @@ export class PhoenixFlame extends Container {
     this.onResize(this.app.renderer.width, this.app.renderer.height);
   }
 
- 
   /** Background text panel */
   addBackground() {
     const textData = {
-      text: "great fire",
+      text: `${this.textHolderText} ${this.particlesArray.length} particles`,
       color: Palette.textSeconday,
     };
 
@@ -140,7 +140,7 @@ export class PhoenixFlame extends Container {
     this.miniGameLayer.addChild(this.particleContainer);
   }
 
-   /** frame particle update */
+  /** frame particle update */
   update(delta: number): void {
     this.emitParticle();
 
@@ -174,7 +174,7 @@ export class PhoenixFlame extends Container {
     }
   }
 
-   /** Emits all available particles */
+  /** Emits all available particles */
   emitParticle() {
     for (let i = 0; i < this.particlesArray.length; i++) {
       const particleToEmit = this.findInactiveParticle();
@@ -216,11 +216,12 @@ export class PhoenixFlame extends Container {
     }
   }
 
-  
   /** Creates particle pool */
   addParticles() {
     this.generateTextures();
+  }
 
+  createParticles() {
     for (let i = 0; i < this.PARTICLES_NUMBER; i++) {
       const fire = new FireParticle();
       fire.texture =
@@ -252,12 +253,28 @@ export class PhoenixFlame extends Container {
 
   initListeners() {
     this.on("resize", this.onResize);
+
+    if (this.addParticlesButton)
+      this.addParticlesButton.on("pointerdown", this.addExtraParticles);
   }
+
+  addExtraParticles = () => {
+    this.createParticles();
+    if (this.textHolder) {
+      const text =
+        this.particlesArray.length < 1000
+          ? `${this.textHolderText} ${this.particlesArray.length} particles`
+          : `${this.textHolderText} ${this.particlesArray.length} particles`.toUpperCase();
+      this.textHolder?.updateText(text);
+    }
+  };
 
   addUI() {
     this.backButton = new BackButton();
 
+    this.addParticlesButton = new UIButton("+10", 100, 50, 10);
     this.uiLayer.addChild(this.backButton);
+    this.uiLayer.addChild(this.addParticlesButton);
   }
 
   //** Layout update */
@@ -272,6 +289,13 @@ export class PhoenixFlame extends Container {
     if (this.particleContainer) {
       this.particleContainer.position.set(width / 2, height * 0.75);
       this.baseHolder.position.copyFrom(this.particleContainer);
+    }
+
+    if (this.addParticlesButton) {
+      this.addParticlesButton.position.set(
+        width / 2,
+        height - this.addParticlesButton.height / 2 - 5,
+      );
     }
 
     if (this.textHolder) {
