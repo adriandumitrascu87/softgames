@@ -6,10 +6,8 @@ const app = new Application();
 
 
 await app.init({
-  preference: 'webgl', // Use WebGL for better performance
+  preference: 'webgl', 
   antialias: true,
-  resolution: window.devicePixelRatio || 1,
-  autoDensity: true,
   backgroundColor: 0x8ecae6,
 });
 

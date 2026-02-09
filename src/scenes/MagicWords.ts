@@ -28,7 +28,7 @@ export class MagicWords extends Container {
   private stageVerticalPadding: number = 20; //percent
 
   //gap between text holders
-  private holderGap = 30;
+  private holderGap = 25;
 
   //[char_1, char_2, char_3, char_4] - avatarDataOrder
   private textHolderArray: TextHolder[] = [];
