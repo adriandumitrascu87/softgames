@@ -5,15 +5,14 @@ import { BackButton } from "../ui/BackButton";
 import { UIButton } from "../ui/UIButton";
 import { Palette } from "../utils/Palette";
 import { Utils } from "../utils/Utils";
+import { gsap } from "gsap";
 
 export class AceOfShadows extends Container {
-
   private readonly CARD_AMOUNT = 144;
   private readonly CARD_SPAWN_INTERVAL_MS = 1000;
   private readonly CARD_ANIMATION_DURATION_S = 2;
 
   private readonly RANDOM_STACK_RADIUS = 75;
-
 
   private miniGameLayer = new Container();
   private uiLayer = new Container();
@@ -31,7 +30,6 @@ export class AceOfShadows extends Container {
   private animationInterval?: number;
   private resetButton?: UIButton;
   private app: Application;
-  
 
   constructor(app: Application) {
     super();
@@ -108,11 +106,28 @@ export class AceOfShadows extends Container {
 
       curentCard.position.copyFrom(localPosition);
 
-      Utils.tweenContainerTo(curentCard, 0, 0, this.CARD_ANIMATION_DURATION_S);
-      this.destinationCards.push(curentCard);
+      this.tweenContainerTo(curentCard, 0, 0, this.CARD_ANIMATION_DURATION_S);
     }, this.CARD_SPAWN_INTERVAL_MS);
   }
 
+  tweenContainerTo(
+    card: Card,
+    destX: number,
+    destY: number,
+    duration: number,
+  ) {
+    const angle = card.angle == 0 ? 360 : 0;
+    gsap.to(card, {
+      x: destX,
+      y: destY,
+      duration: duration, // animation lasts 2 seconds
+      angle: angle,
+      ease: "none",
+      onComplete: () => {
+        this.destinationCards.push(card);
+      },
+    });
+  }
 
   handleAnimationComplete() {
     if (this.destinationCards.length === this.CARD_AMOUNT) {

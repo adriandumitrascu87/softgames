@@ -13,9 +13,6 @@ await app.init({
   backgroundColor: 0x8ecae6,
 });
 
-app.init()
-
-
 document.body.appendChild(app.canvas);
 
 new GameInit(app);

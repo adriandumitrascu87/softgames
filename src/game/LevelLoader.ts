@@ -7,6 +7,7 @@ import { PhoenixFlame } from "../scenes/PhoenixFlame";
 import { AceOfShadows } from "../scenes/AceOfShadows";
 import { CardAssets } from "../objects/CardAssets";
 import type { Application } from "pixi.js";
+import { MagicWordsAssets } from "../objects/MagicWordsAssets";
 
 export class LevelLoader {
   constructor(private levelManager: LevelManager, private app:Application) {}
@@ -44,7 +45,10 @@ export class LevelLoader {
 
         break;
       case "lvl_2":
-        this.load(new MagicWords());
+        MagicWordsAssets.load().then(()=>{
+          
+          this.load(new MagicWords(this.app));
+        })
         break;
       case "lvl_3":
         this.load(new PhoenixFlame());

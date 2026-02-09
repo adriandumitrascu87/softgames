@@ -66,6 +66,15 @@ export class UIButton extends Container {
     this.addChild(this.buttonLabelText);
   }
 
+  updateLabel(newLabel: string) {
+    this.buttonLabelText.text = newLabel;
+    this.checkLabelSize();
+  }
+
+  getLabelText() {
+    return this.buttonLabelText.text;
+  }
+
   checkLabelSize = () => {
     const minFontSize: number = 20;
 
@@ -84,11 +93,11 @@ export class UIButton extends Container {
   };
 
   disableInput() {
-    console.log(this.buttonLabel + " disabled")
+    console.log(this.buttonLabel + " disabled");
     this.eventMode = "none";
   }
   enableInput() {
-     console.log(this.buttonLabel + " enabled")
+    console.log(this.buttonLabel + " enabled");
     this.eventMode = "static";
   }
 
