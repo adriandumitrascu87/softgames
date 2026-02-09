@@ -1,4 +1,4 @@
-import { Assets, Texture } from "pixi.js";
+import {  Texture } from "pixi.js";
 
 /** Loads and stores all Magic Words assets (data, avatars, emojis) */
 export class MagicWordsAssets {

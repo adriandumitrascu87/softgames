@@ -1,4 +1,4 @@
-import { Application, Assets, Container, Sprite, Text, Texture } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import { BackButton } from "../ui/BackButton";
 import { TextHolder } from "../objects/TextHolder";
 import { Palette } from "../utils/Palette";
@@ -28,7 +28,7 @@ export class MagicWords extends Container {
   private stageVerticalPadding: number = 20; //percent
 
   //gap between text holders
-  private holderGap = 20;
+  private holderGap = 30;
 
   //[char_1, char_2, char_3, char_4] - avatarDataOrder
   private textHolderArray: TextHolder[] = [];
@@ -42,7 +42,7 @@ export class MagicWords extends Container {
   private currentDialogLine: number = 0;
 
   private magicWordsData: any;
-  private emojiData: any;
+  // private emojiData: any;
 
   constructor(app: Application) {
     super();
@@ -57,7 +57,7 @@ export class MagicWords extends Container {
     this.addChild(this.uiLayer);
 
     this.magicWordsData = MagicWordsAssets.data;
-    this.emojiData = this.magicWordsData.emojis;
+    // this.emojiData = this.magicWordsData.emojis;
 
     this.numberOfCaracters = this.magicWordsData.avatars.length;
 
@@ -302,6 +302,6 @@ export class MagicWords extends Container {
 
     this.activePanel = undefined;
     this.magicWordsData = undefined;
-    this.emojiData = undefined;
+    // this.emojiData = undefined;
   }
 }

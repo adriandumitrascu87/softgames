@@ -4,7 +4,7 @@ import { UIButton } from "./UIButton";
 /** Level selection button that loads the level indicated by the label */
 export class LevelButton extends UIButton {
   constructor(lvlButtonLabel:string, levelToload:string) {
-    super(lvlButtonLabel);
+    super(lvlButtonLabel, 300, 80);
     this.on("pointerdown", ()=>{
         this.handleLevelClick(levelToload);
     });

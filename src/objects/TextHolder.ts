@@ -1,15 +1,11 @@
 import {
-  CanvasTextMetrics,
   Container,
   Graphics,
-  Point,
   Sprite,
   Text,
-  Texture,
 } from "pixi.js";
 import { Avatar } from "./Avatar";
 import { MagicWordsAssets } from "./MagicWordsAssets";
-import { Utils } from "../utils/Utils";
 import { gsap } from "gsap";
 
 /** Text holder with text, avatar, and optional emoji */
