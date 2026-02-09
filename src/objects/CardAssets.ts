@@ -5,10 +5,10 @@ export class CardAssets {
 
   static async load() {
     const texturePaths = [
-      "images/ace_1.png",
-      "images/ace_2.png",
-      "images/ace_3.png",
-      "images/ace_4.png",
+      "images/cards/ace_1.png",
+      "images/cards/ace_2.png",
+      "images/cards/ace_3.png",
+      "images/cards/ace_4.png",
     ];
     await Assets.load(texturePaths);
 
