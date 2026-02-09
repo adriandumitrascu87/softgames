@@ -1,4 +1,4 @@
-import { Container, Text, TextStyle } from "pixi.js";
+import { Container, Text } from "pixi.js";
 import { PlayButton } from "../ui/PlayButton";
 import { Palette } from "../utils/Palette";
 import { gsap } from "gsap";
