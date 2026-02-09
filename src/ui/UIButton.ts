@@ -1,6 +1,7 @@
 import { Container, Graphics, Text } from "pixi.js";
 import { Palette } from "../utils/Palette";
-
+import { Utils } from "../utils/Utils";
+/** Base UI button component with customizable appearance and auto-scaling text */
 export class UIButton extends Container {
   private bg!: Graphics;
   private buttonLabelText!: Text;
@@ -33,10 +34,12 @@ export class UIButton extends Container {
     this.setupMouseEvents();
   }
 
+   /** Centers button pivot point */
   centerContainer() {
     this.pivot.set(this.buttonWidth / 2, this.buttonHeight / 2);
   }
 
+   /** Creates rounded rectangle background */
   private createBackground() {
     this.bg = new Graphics()
       .roundRect(0, 0, this.buttonWidth, this.buttonHeight, this.buttonRadius)
@@ -45,6 +48,7 @@ export class UIButton extends Container {
     this.addChild(this.bg);
   }
 
+    /** Creates centered text label with auto-sizing */
   private createLabel() {
     this.buttonLabelText = new Text({
       text: this.buttonLabel,
@@ -66,15 +70,18 @@ export class UIButton extends Container {
     this.addChild(this.buttonLabelText);
   }
 
+  /** Updates button text */
   updateLabel(newLabel: string) {
     this.buttonLabelText.text = newLabel;
     this.checkLabelSize();
   }
 
+  /** Returns current  text */
   getLabelText() {
     return this.buttonLabelText.text;
   }
 
+    /** Shrinks font size if text exceeds button width */
   checkLabelSize = () => {
     const minFontSize: number = 20;
 
@@ -92,15 +99,19 @@ export class UIButton extends Container {
     // console.log("AFTER", this.buttonLabelText.style.fontSize);
   };
 
+   /** Disables button*/
   disableInput() {
-    console.log(this.buttonLabel + " disabled");
+    // console.log(this.buttonLabel + " disabled");
     this.eventMode = "none";
   }
+
+    /** Enables button*/
   enableInput() {
-    console.log(this.buttonLabel + " enabled");
+    // console.log(this.buttonLabel + " enabled");
     this.eventMode = "static";
   }
 
+    /** Sets up  events for visual feedback */
   private setupMouseEvents() {
     this.eventMode = "static";
     this.cursor = "pointer";
@@ -112,5 +123,20 @@ export class UIButton extends Container {
     this.on("pointerup", () => {
       this.scale.set(1);
     });
+  }
+
+   /** Cleanup: removes listeners, kills tweens, destroys children */
+  destroy(options?: boolean | { children?: boolean }) {
+    this.removeAllListeners();
+
+
+    Utils.recursiveKillTweens(this);
+    Utils.destroyAllChildren(this);
+
+
+    this.eventMode = "none";
+    this.cursor = "default";
+
+    super.destroy(options);
   }
 }

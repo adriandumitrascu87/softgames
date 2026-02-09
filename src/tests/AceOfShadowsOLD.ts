@@ -96,8 +96,8 @@ export class AceOfShadowsOLD extends Container {
       // console.log(this.testCount);
       this.animateCards();
     } else {
-      console.log(this.destinationCards.length);
-      console.log("DONE");
+      // console.log(this.destinationCards.length);
+      // console.log("DONE");
     }
   };
 

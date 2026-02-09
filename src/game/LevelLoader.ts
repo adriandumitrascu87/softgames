@@ -8,14 +8,16 @@ import { AceOfShadows } from "../scenes/AceOfShadows";
 import { CardAssets } from "../objects/CardAssets";
 import type { Application } from "pixi.js";
 import { MagicWordsAssets } from "../objects/MagicWordsAssets";
-
+/** Handles level loading and scene transitions */
 export class LevelLoader {
   constructor(private levelManager: LevelManager, private app:Application) {}
 
+    /** Initializes event listeners */
   init() {
     this.registerLoadLevelEvents();
   }
 
+   /** Registers global load/navigation events */
   private registerLoadLevelEvents() {
     loadEvents.on("START", () => {
       this.load(new LevelSelect());
@@ -30,16 +32,19 @@ export class LevelLoader {
     });
   }
 
+
+    /** Loads a scene and applies resize */
   private load(unit: any) {
     this.levelManager.loadLevel(unit);
     this.levelManager.onResize(window.innerWidth, window.innerHeight);
   }
 
+  /** Loads a game level by ID (with assets if needed) */
   private loadGameLevel(levelId: string) {
     switch (levelId) {
       case "lvl_1":
         CardAssets.load().then(() => {
-          console.log("loading cards");
+          // console.log("loading cards");
           this.levelManager.loadLevel(new AceOfShadows(this.app));
         });
 
@@ -51,7 +56,7 @@ export class LevelLoader {
         })
         break;
       case "lvl_3":
-        this.load(new PhoenixFlame());
+        this.load(new PhoenixFlame(this.app));
         break;
     }
   }

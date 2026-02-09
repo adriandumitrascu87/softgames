@@ -1,10 +1,10 @@
-
 import { Card } from "./Card";
 import { CardAssets } from "./CardAssets";
 
+/** Object pool for Card instances */
+
 export class CardPool {
   private pool: Card[] = [];
-
 
   constructor(initialSize: number) {
     for (let i = 0; i < initialSize; i++) {
@@ -21,5 +21,4 @@ export class CardPool {
     if (!card) card = this.createCard();
     return card;
   }
-
 }

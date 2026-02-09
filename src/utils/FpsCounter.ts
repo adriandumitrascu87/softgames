@@ -1,6 +1,7 @@
 import { Container, Text, TextStyle } from "pixi.js";
 import { Palette } from "./Palette";
 
+/** Simple FPS counter using ticker delta */
 export class FpsCounter extends Container {
   private FPS_TAG: string = "FPS";
 
@@ -14,7 +15,10 @@ export class FpsCounter extends Container {
     fontSize: 20,
     fill: Palette.textSeconday,
   });
+
+   // Auto-reposition flag
   repositionNeeded: boolean = false;
+  // Used to detect text width changes
   lastTextWidth: number = 0;
 
   constructor(x?: number, y?: number) {
@@ -23,6 +27,7 @@ export class FpsCounter extends Container {
     this.addObject(x, y);
   }
 
+    /** Positions the FPS label */
   addObject(x?: number, y?: number) {
     if (x && y) {
       this.fpsText.position.set(x, y);
@@ -37,6 +42,7 @@ export class FpsCounter extends Container {
     this.visible = false;
   }
 
+   /** Creates FPS text object */
   private createTextObject() {
     this.fpsText = new Text({
       text: `${this.FPS_TAG} :0 `,
@@ -46,6 +52,8 @@ export class FpsCounter extends Container {
     this.fpsText.anchor.set(0.5, 0.5);
   }
 
+  
+  /** Updates FPS value once per second */
   update(delta: number) {
     this.elapsed += delta;
     this.frames++;
@@ -56,6 +64,7 @@ export class FpsCounter extends Container {
       this.elapsed = 0;
       this.frames = 0;
 
+      // Reposition only if text size changed
       if (this.fpsText.width != this.lastTextWidth) {
         this.visible = true;
         this.resize();
@@ -64,6 +73,7 @@ export class FpsCounter extends Container {
     }
   }
 
+    /** Keeps FPS label inside screen bounds */
   resize() {
     if (
       this.fpsText.position.x - this.fpsText.anchor.x * this.fpsText.width <

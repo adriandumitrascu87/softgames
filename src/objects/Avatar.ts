@@ -1,6 +1,7 @@
 import { Container, Graphics, Sprite, Text, Texture } from "pixi.js";
 import { Palette } from "../utils/Palette";
 import { gsap } from "gsap";
+import { Utils } from "../utils/Utils";
 
 /** Avatar with sprite, optional name tag, and idle animation */
 export class Avatar extends Container {
@@ -25,7 +26,6 @@ export class Avatar extends Container {
       this.createNameTag(name);
     }
 
-
     this.addChild(this.avatar);
     this.animAvatar();
   }
@@ -37,11 +37,11 @@ export class Avatar extends Container {
       ease: "power2.inOut",
       yoyo: true,
       repeat: -1,
-      delay: Math.random() * 2
+      delay: Math.random() * 2,
     });
   }
 
-    /** Scales avatar to fit bounds */
+  /** Scales avatar to fit bounds */
   resize(maxWidth: number, maxHeight: number) {
     const scaleX = maxWidth / this.originalWidth;
     const scaleY = maxHeight / this.originalHeight;
@@ -51,7 +51,7 @@ export class Avatar extends Container {
     this.avatar.scale.set(scale);
   }
 
-   /** Creates background and label for name */
+  /** Creates background and label for name */
   createNameTag(name: string) {
     this.createBackground();
     this.createNameLabel(name);
@@ -93,11 +93,24 @@ export class Avatar extends Container {
   };
 
   createBackground() {
-    
-    this.bg = new Graphics().roundRect(0, 0, this.originalWidth-0.75, 20, 2).fill(Palette.primary);
+    this.bg = new Graphics()
+      .roundRect(0, 0, this.originalWidth - 0.75, 20, 2)
+      .fill(Palette.primary);
 
     this.avatar.addChild(this.bg);
     this.bg.x = -this.bg.width / 2;
     this.bg.y = this.avatar.height / 2;
+  }
+
+  destroy(options?: boolean | { children?: boolean }) {
+    this.removeAllListeners();
+
+    Utils.recursiveKillTweens(this);
+    Utils.destroyAllChildren(this);
+
+    this.eventMode = "none";
+    this.cursor = "default";
+
+    super.destroy(options);
   }
 }

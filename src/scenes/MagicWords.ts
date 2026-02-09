@@ -135,7 +135,7 @@ export class MagicWords extends Container {
         this.activePanel.updateEmoji(emojiText.key);
         this.activePanel.updateText(emojiText.text);
 
-        console.log(emojiText);
+        // console.log(emojiText);
       }
     }
 
@@ -292,5 +292,16 @@ export class MagicWords extends Container {
           layout.itemHeight / 2,
       );
     }
+  }
+
+  destroyUnit() {
+    this.removeAllListeners();
+    Utils.recursiveKillTweens(this);
+
+    Utils.destroyAllChildren(this);
+
+    this.activePanel = undefined;
+    this.magicWordsData = undefined;
+    this.emojiData = undefined;
   }
 }

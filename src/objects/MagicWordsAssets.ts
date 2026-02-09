@@ -57,13 +57,13 @@ export class MagicWordsAssets {
     this.totalToLoad = this.data.emojis.length + this.data.avatars.length;
     this.loadedCount = 0;
 
-    console.log("magicwords data:", this.data);
+    // console.log("magicwords data:", this.data);
 
     this.createSprites();
 
     // wait until all images are loaded
     await new Promise<void>((resolve) => {
-      console.log("RESOLVE");
+      // console.log("RESOLVE");
       this.resolveLoad = resolve;
     });
 

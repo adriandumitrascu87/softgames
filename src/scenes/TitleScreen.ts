@@ -4,6 +4,7 @@ import { Palette } from "../utils/Palette";
 import { gsap } from "gsap";
 import { Utils } from "../utils/Utils";
 
+/** Title screen level - first to load */
 export class TitleScreen extends Container {
   private playButton?: PlayButton;
   title?: Text;
@@ -84,11 +85,10 @@ export class TitleScreen extends Container {
   }
 
   destroyUnit() {
-    this.off("resize", this.onResize);
-
+    this.removeAllListeners();
     Utils.recursiveKillTweens(this);
 
-    this.destroy({ children: true });
+    Utils.destroyAllChildren(this);
 
     this.playButton = undefined;
     this.title = undefined;
@@ -103,4 +103,6 @@ export class TitleScreen extends Container {
       this.titleContainer.position.set(width / 2, height / 3);
     }
   }
+
+
 }

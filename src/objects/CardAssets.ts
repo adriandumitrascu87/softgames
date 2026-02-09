@@ -1,5 +1,6 @@
 import { Assets, type Texture } from "pixi.js";
 
+/** Loads and stores card textures */
 export class CardAssets {
   static textures: Texture[] = [];
 

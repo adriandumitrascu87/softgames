@@ -94,4 +94,11 @@ export class Utils {
       },
     });
   }
+
+  static destroyAllChildren(container: Container) {
+  for (const child of container.children) {
+    child.destroy({ children: true });
+  }
+  container.removeChildren();
+}
 }

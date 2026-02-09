@@ -7,6 +7,7 @@ import { Palette } from "../utils/Palette";
 import { Utils } from "../utils/Utils";
 import { gsap } from "gsap";
 
+
 export class AceOfShadows extends Container {
   private readonly CARD_AMOUNT = 144;
   private readonly CARD_SPAWN_INTERVAL_MS = 1000;
@@ -88,7 +89,7 @@ export class AceOfShadows extends Container {
   animateNextCard() {
     this.animationInterval = setInterval(() => {
       if (this.allCards.length === 0) {
-        this.handleAnimationComplete();
+      
         clearInterval(this.animationInterval);
       }
 
@@ -110,12 +111,7 @@ export class AceOfShadows extends Container {
     }, this.CARD_SPAWN_INTERVAL_MS);
   }
 
-  tweenContainerTo(
-    card: Card,
-    destX: number,
-    destY: number,
-    duration: number,
-  ) {
+  tweenContainerTo(card: Card, destX: number, destY: number, duration: number) {
     const angle = card.angle == 0 ? 360 : 0;
     gsap.to(card, {
       x: destX,
@@ -125,18 +121,18 @@ export class AceOfShadows extends Container {
       ease: "none",
       onComplete: () => {
         this.destinationCards.push(card);
+          this.handleAnimationComplete();
       },
     });
   }
 
   handleAnimationComplete() {
     if (this.destinationCards.length === this.CARD_AMOUNT) {
-      console.log("Animation Done", this.destinationCards.length);
+      // console.log("Animation Done", this.destinationCards.length);
       if (this.resetButton)
         Utils.toggleButtonVisibility(
           this.resetButton,
-          true,
-          this.CARD_SPAWN_INTERVAL_MS / 1000,
+          true
         );
     }
   }
@@ -161,7 +157,7 @@ export class AceOfShadows extends Container {
   };
   // Reset cards back to the initial stack
   resetCards = () => {
-    console.log("RESET CARDS");
+    // console.log("RESET CARDS");
     this.destinationStackContainer.removeChildren();
     this.allCards = this.destinationCards.slice();
     this.destinationCards = [];
@@ -240,17 +236,12 @@ export class AceOfShadows extends Container {
       this.animationInterval = undefined;
     }
 
+    this.removeAllListeners();
     Utils.recursiveKillTweens(this);
-
-    this.playButton?.off("pointerdown", this.handleOnPlayClick);
-    this.resetButton?.off("pointerdown", this.handleOnResetClick);
-    this.off("resize", this.onResize);
-
-    this.destroy({ children: true });
-
+    Utils.destroyAllChildren(this);
     this.allCards.length = 0;
     this.destinationCards.length = 0;
 
-    console.log("DESTROY Ace Of Shadows");
+    // console.log("DESTROY Ace Of Shadows");
   }
 }

@@ -1,3 +1,5 @@
+
+/** Shared color palette */
 export const Palette = {
 
   primary: 0x023047,
