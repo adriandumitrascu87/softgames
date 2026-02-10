@@ -25,10 +25,12 @@ export class GameInit {
     this.app = app;
 
     // Lock FPS on mobile to avoid dynamic throttling
-    if (isMobile.any) {
-      this.app.ticker.maxFPS = 60;
-      this.app.ticker.minFPS = 60;
-    }
+    // if (isMobile.any) {
+    //   this.app.ticker.maxFPS = 61; // Cap at 65
+    //   this.app.ticker.minFPS = 60; 
+    // } else {
+    //   this.app.ticker.maxFPS = 120; // Allow higher on desktop
+    // }
 
     // Add root layers
     this.app.stage.addChild(this.gameLayer);
@@ -67,7 +69,7 @@ export class GameInit {
     this.levelManager.loadLevel(new TitleScreen());
   }
 
-   /** Main update loop */
+  /** Main update loop */
   iniLoop = () => {
     this.app.ticker.add((ticker) => {
       this.fpsCounter.update(ticker.deltaMS);
