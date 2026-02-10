@@ -4,7 +4,7 @@ import { FpsCounter } from "../utils/FpsCounter";
 import { LevelLoader } from "./LevelLoader";
 import { TitleScreen } from "../scenes/TitleScreen";
 
-import { isMobile } from "pixi.js";
+// import { isMobile } from "pixi.js";
 
 /** Bootstraps the game and core systems */
 
