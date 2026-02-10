@@ -6,10 +6,10 @@ export class CardAssets {
 
   static async load() {
     const texturePaths = [
-      "images/cards/ace_1.png",
-      "images/cards/ace_2.png",
-      "images/cards/ace_3.png",
-      "images/cards/ace_4.png",
+      `${import.meta.env.BASE_URL}images/cards/ace_1.png`,
+      `${import.meta.env.BASE_URL}images/cards/ace_2.png`,
+      `${import.meta.env.BASE_URL}images/cards/ace_3.png`,
+      `${import.meta.env.BASE_URL}images/cards/ace_4.png`,
     ];
     await Assets.load(texturePaths);
 
