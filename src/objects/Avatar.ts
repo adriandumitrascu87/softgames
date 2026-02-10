@@ -70,7 +70,7 @@ export class Avatar extends Container {
 
     this.nameTag.anchor.set(0.5, 0.5);
 
-    // this.checkLabelSize();
+    this.checkLabelSize();
 
     this.avatar.addChild(this.nameTag);
     this.nameTag.position.set(
@@ -83,9 +83,9 @@ export class Avatar extends Container {
     const minFontSize: number = 5;
     if (!this.bg) return;
     if (!this.nameTag) return;
-    if (this.bg.width <= this.bg.width * 0.9) return;
+    if (this.nameTag.width <= this.bg.width * 0.9) return;
     while (
-      this.bg.width > this.bg.width * 0.9 &&
+      this.nameTag.width > this.bg.width * 0.9 &&
       this.nameTag.style.fontSize > minFontSize
     ) {
       this.nameTag.style.fontSize = this.nameTag.style.fontSize - 1;
@@ -94,7 +94,7 @@ export class Avatar extends Container {
 
   createBackground() {
     this.bg = new Graphics()
-      .roundRect(0, 0, this.originalWidth - 0.75, 20, 2)
+      .roundRect(0, 0, 90, 20, 2)
       .fill(Palette.primary);
 
     this.avatar.addChild(this.bg);

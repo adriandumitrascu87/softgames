@@ -12,7 +12,7 @@ import { gsap } from "gsap";
 export class TextHolder extends Container {
   private readonly INITIAL_FONT_SIZE = 50;
   private readonly MINIMUM_FONT_SIZE = 5;
-  private readonly TEXT_PADDING = 10; //percent
+  private readonly TEXT_PADDING = 20; //percent
   private bg?: Graphics;
   private textHolder?: Text;
   padding: number;

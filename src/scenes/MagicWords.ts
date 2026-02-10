@@ -25,7 +25,7 @@ export class MagicWords extends Container {
   // horizontal safe area padding
   private stageHorizontalPadding: number = 20; //percent
   // vertical safe area padding
-  private stageVerticalPadding: number = 20; //percent
+  private stageVerticalPadding: number = 25; //percent
 
   //gap between text holders
   private holderGap = 25;
@@ -203,6 +203,9 @@ export class MagicWords extends Container {
 
       this.miniGameLayer.addChild(textHolder);
       this.textHolderArray.push(textHolder);
+
+      textHolder.alpha = 0.5;
+      textHolder.scale.set(0.9,0.9);
     }
   };
 
