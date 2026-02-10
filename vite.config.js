@@ -7,12 +7,6 @@ export default defineConfig({
     outDir: 'dist', // default, safe
     assetsDir: 'assets', // default, keeps CSS/JS in assets/
      sourcemap: true, // Helps debug minified code
-
-     rollupOptions: {
-      output: {
-        manualChunks: undefined, // disables chunking
-      },
-    },
   },
   server: {
     host: true,
